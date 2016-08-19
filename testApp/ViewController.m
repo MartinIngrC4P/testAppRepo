@@ -8,11 +8,15 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UIScrollViewDelegate> // SCROLL VIEW DELEGATE !
 
 @property (weak, nonatomic) IBOutlet UIButton *firstButton;
 
 @property (strong, nonatomic) UIButton *myNewButton;
+@property (weak, nonatomic) IBOutlet UIScrollView *sliderScrollView;
+@property (nonatomic) CGRect screen;
+@property (nonatomic) CGFloat sWThird;
+@property (strong, nonatomic) NSArray<NSString *> *titlesOfButtons;
 
 @end
 
@@ -21,7 +25,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.screen = [UIScreen mainScreen].bounds;
+    self.sWThird = self.screen.size.width/3;
     // git ahoj
+    
+    self.titlesOfButtons = @[@"placeholder", @"Návody", @"Zdraví", @"Něco", @"Hovna", @"Další"];
     
     
     [self postXmlWithXmlString:@""
@@ -43,10 +51,43 @@
     
     // tohle je to same co firstButtonAction akorat udělane kodem
     [self.myNewButton addTarget:self action:@selector(newButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self setupScrollViewWithArrayOfButtons:[self generateButtons:5]];
+}
+
+
+- (void)setupScrollViewWithArrayOfButtons:(NSArray<UIButton *> *)buttonsArray {
+    for (UIButton *button in buttonsArray) {
+        [self.sliderScrollView addSubview:button];
+    }
+    
+    CGFloat contentSize = buttonsArray.count * self.sWThird + self.sWThird * 2;
+    [self.sliderScrollView setContentSize:CGSizeMake(contentSize, 70)];
+    
+    self.sliderScrollView.showsVerticalScrollIndicator = NO;
+    self.sliderScrollView.showsHorizontalScrollIndicator = NO;
+}
+
+- (NSArray<UIButton *> *)generateButtons:(NSInteger)numberOfButtons {
+    // sWThird je počateční pozice a zaroveň třetina screenu.
+    NSMutableArray *buttonsArray = [NSMutableArray new];
+    for (int i = 1; i < numberOfButtons; i++) {
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(self.sWThird * i, 0, self.sWThird, 70)];
+        [button setTitle:self.titlesOfButtons[i] forState:UIControlStateNormal];
+        [button.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Light" size:15]];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [buttonsArray addObject:button];
+    }
+    
+    return buttonsArray;
 }
 
 - (void)newButtonAction {
     NSLog(@"tapped new button");
+    
+    [self.myNewButton setTitle:@"TYS MĚ TAPNUL" forState:UIControlStateNormal];
+    [self.myNewButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.myNewButton.backgroundColor = [UIColor redColor];
 }
 
 
