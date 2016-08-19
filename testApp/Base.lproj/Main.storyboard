@@ -30,15 +30,27 @@
                                     <action selector="firstButtonActio" destination="BYZ-38-t0r" eventType="touchUpInside" id="t4Z-HF-Mum"/>
                                 </connections>
                             </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="80N-BO-FSl">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
+                                <color key="backgroundColor" red="0.60651431073454343" green="0.79091548915070364" blue="0.94042457460732987" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="WUf-q5-91z"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="80N-BO-FSl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="5OB-8l-24L"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="GV5-2u-rfE" secondAttribute="bottom" constant="20" id="9wJ-um-Kt2"/>
                             <constraint firstItem="GV5-2u-rfE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EKK-AW-fhb"/>
+                            <constraint firstItem="80N-BO-FSl" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Xcn-sW-pPT"/>
+                            <constraint firstAttribute="trailing" secondItem="80N-BO-FSl" secondAttribute="trailing" id="kxI-ul-m5f"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="firstButton" destination="GV5-2u-rfE" id="Xln-T9-fdw"/>
+                        <outlet property="sliderScrollView" destination="80N-BO-FSl" id="HOe-qQ-Dia"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
