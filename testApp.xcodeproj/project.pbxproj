@@ -308,6 +308,7 @@
 				DC113CD01D66DF2800E29492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UIScrollViewDelegate> // SCROLL VIEW DELEGATE !
+@interface ViewController () <UIScrollViewDelegate, NSXMLParserDelegate> // SCROLL VIEW DELEGATE !
 
 @property (weak, nonatomic) IBOutlet UIButton *firstButton;
 
@@ -17,6 +17,8 @@
 @property (nonatomic) CGRect screen;
 @property (nonatomic) CGFloat sWThird;
 @property (strong, nonatomic) NSArray<NSString *> *titlesOfButtons;
+
+@property (strong, nonatomic) NSDictionary *congressDataDictionary;
 
 @end
 
@@ -30,12 +32,6 @@
     // git ahoj
     
     self.titlesOfButtons = @[@"placeholder", @"Návody", @"Zdraví", @"Něco", @"Hovna", @"Další"];
-    
-    
-    [self postXmlWithXmlString:@""
-                      withName:@""
-                    withNumber:@""
-                withPassportId:@""];
     
     self.firstButton.layer.borderWidth = 1.0f;
     self.firstButton.layer.borderColor = [UIColor redColor].CGColor;
@@ -95,7 +91,10 @@
 
 - (IBAction)firstButtonActio {
     NSLog(@"tapped");
-    [self postXmlWithXmlString:@"" withName:@"" withNumber:@"" withPassportId:@""];
+    [self postXmlWithCongressId:@"1"
+                      loginHash:@"fb3b13b58df8d713aefd4449da0411d6"
+                     languageId:@"1"
+                     lastUpdate:@""];
 }
 
 - (void)postJson {
@@ -138,7 +137,7 @@
     }
 }
 
-- (void)postXmlWithXmlString:(NSString *)xmlString withName:(NSString *)name withNumber:(NSString *)number withPassportId:(NSString *)passportId {
+- (void)postXmlWithCongressId:(NSString *)congressId loginHash:(NSString *)loginHash languageId:(NSString *)languageId lastUpdate:(NSString *)lastUpdate {
     
     __block NSMutableDictionary *resultsDictionary;
     
@@ -161,15 +160,14 @@
     if ([NSJSONSerialization isValidJSONObject:userDictionary]) {
         
         NSError* error;
-        NSData *xmlData = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *parameterString = [NSString stringWithFormat:@"&congressid=%@&loginhash=%@&languageid=%@&lastupdate=%@", congressId, loginHash, languageId, lastUpdate];
+        NSData *parameterData = [parameterString dataUsingEncoding:NSUTF8StringEncoding];
         
-        NSURL* url = [NSURL URLWithString:@"www.google.com"];
+        NSURL* url = [NSURL URLWithString:@"http://cdn.smartcongress.cz/get_congress.php"];
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
         [request setHTTPMethod:@"POST"];
-        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        [request setValue:[NSString stringWithFormat:@"%lu",(unsigned long)[xmlData length]] forHTTPHeaderField:@"Content-length"];
-        [request setHTTPBody:xmlData];
+        [request setValue:[NSString stringWithFormat:@"%lu",(unsigned long)[parameterData length]] forHTTPHeaderField:@"Content-length"];
+        [request setHTTPBody:parameterData];
         
         __block NSError *errorOut = [NSError new];
         
@@ -180,10 +178,15 @@
                                completionHandler:^(NSURLResponse *response,NSData *data,NSError *error) {
                                    
                                    if ([data length]>0 && error == nil) {
-                                       resultsDictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                                           options:NSJSONReadingMutableLeaves
-                                                                                             error:&errorOut];
-                                       // je tu něco
+                                      
+                                       NSString *congressData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                       NSLog(@"%@", congressData);
+                                       /*   XML PARSER (používá DELEGATE!)
+                                       NSXMLParser *myParser = [[NSXMLParser alloc] initWithData:data];
+                                       [myParser setDelegate:self];
+                                       [myParser setShouldResolveExternalEntities: YES];
+                                       [myParser parse];
+                                      */
                                    } else if ([data length]==0 && error ==nil) {
                                        // bez dat
                                    } else if( error!=nil) {
@@ -200,5 +203,11 @@
     
 }// any offset changes
 
+#pragma mark - xmlParser
+
+-(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary<NSString *,NSString *> *)attributeDict {
+    // parsed AtrributeDict bude mít vše.
+    
+}
 
 @end
