@@ -66,6 +66,8 @@
     
     self.sliderScrollView.showsVerticalScrollIndicator = NO;
     self.sliderScrollView.showsHorizontalScrollIndicator = NO;
+    
+    self.sliderScrollView.delegate = self;
 }
 
 - (NSArray<UIButton *> *)generateButtons:(NSInteger)numberOfButtons {
@@ -190,5 +192,13 @@
                                }];
     }
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    NSInteger index =  (NSInteger)((self.sliderScrollView.contentOffset.x+self.screen.size.width/3*2)/(self.sliderScrollView.contentSize.width / (self.titlesOfButtons.count - 1)));
+    [self.myNewButton setTitle:self.titlesOfButtons[index] forState:UIControlStateNormal];
+    
+}// any offset changes
+
 
 @end
