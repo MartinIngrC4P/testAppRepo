@@ -33,6 +33,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="80N-BO-FSl">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                                 <color key="backgroundColor" red="0.92167914851725052" green="0.8899185639306747" blue="0.94042457460732987" alpha="0.6165503102836879" colorSpace="calibratedRGB"/>
+
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="WUf-q5-91z"/>
                                 </constraints>
